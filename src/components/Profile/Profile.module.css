@@ -1,0 +1,10 @@
+.profile {
+    grid-area: p;
+    background-color: #F8F9FA;
+}
+
+.loginBlock {
+  margin: 0 auto;
+  max-width: 100%;
+}
+

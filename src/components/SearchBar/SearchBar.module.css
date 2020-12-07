@@ -1,0 +1,18 @@
+.searhBar {
+  border-right: 1px solid gray;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-collapse : collapse;
+  width: 100%;
+}
+
+.logo img  {
+  margin: -15px 0px 0px 0px;
+  width: 100px;
+  height: 100px;
+}
+

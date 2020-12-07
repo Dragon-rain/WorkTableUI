@@ -1,0 +1,7 @@
+.selectedPage {
+    font-weight: bold;
+}
+
+.currentPage {
+    cursor: pointer;
+}

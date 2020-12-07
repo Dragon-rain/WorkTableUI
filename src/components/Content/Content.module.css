@@ -1,0 +1,16 @@
+.cont {
+    padding: 10px;
+}
+
+.profileDescription {
+    padding: 10px;
+}
+
+.profilePhoto {
+    max-width: 30vh;
+    max-height: 40vh;
+}
+
+.contact {
+    padding-left: 10px;
+}
