@@ -1,5 +1,4 @@
-import { stopSubmit } from "redux-form";
-import { ProfileAPI } from "../api/api";
+import { AuthAPI } from "../api/api";
 import Cookies from 'js-cookie'
 
 const SET_USER_DATA = 'profile/SET_USER_DATA';
@@ -36,7 +35,7 @@ export const setUserData = (userId, username, firstName, lastName, age, gender, 
 export const GetCaptchaUrlSuccess = (captchaUrl) => ({type: GET_CAPTCHA_URL, payload: {captchaUrl}})
 
 export const getUserData = (username) => async (dispatch) => {
-    const response = await ProfileAPI.getUser(username)
+    const response = await AuthAPI.getUser(username)
     if(response.data.resultCode === 0) {
         let user = response.data.user;
         dispatch(setUserData(user.id, user.username, user.firstName, user.lastName, user.age, user.gender, true))
@@ -45,7 +44,7 @@ export const getUserData = (username) => async (dispatch) => {
 }
 
 export const login = (username, password, captcha) => async (dispatch) => { 
-    const response = await ProfileAPI.login(username, password, captcha);
+    const response = await AuthAPI.login(username, password, captcha);
     if(response.data.resultCode === 0) {
         Cookies.set("token", response.data.token);
         Cookies.set("username", response.data.user.username)
@@ -54,7 +53,7 @@ export const login = (username, password, captcha) => async (dispatch) => {
 }
 
 export const registration = (username, password, firstName, lastName, age, gender) => async (dispath) => {
-    const response = await ProfileAPI.registration(username, password, firstName, lastName, age, gender);
+    const response = await AuthAPI.registration(username, password, firstName, lastName, age, gender);
     if(response.data.resultCode === 0) {
         Cookies.set("token", response.data.token);
         Cookies.set("username", response.data.user.username)

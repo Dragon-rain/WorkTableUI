@@ -1,4 +1,4 @@
-import { ContentAPI } from "../api/api";
+import { MainAPI } from "../api/api";
 
 const ADD_POST = 'content/ADD-POST';
 const SET_POSTS ='content/SET_USERS';
@@ -62,7 +62,7 @@ export const setMessage = (message) => ({type: SET_MESSAGE, payload: {message}})
 export const requestPosts = (currentPage, pageSize) => async (dispatch) => {
     dispatch(toggleIsFetching(true));
     dispatch(setCurrentPage(currentPage))
-    const response = await ContentAPI.getAllPosts(currentPage, pageSize);
+    const response = await MainAPI.getAllPosts(currentPage, pageSize);
     if(response.data.resultCode === 0) {
         dispatch(toggleIsFetching(false));
         dispatch(setPosts(response.data.posts));
