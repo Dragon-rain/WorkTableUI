@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import { required } from '../../utils/validators/validators'
-import { CreateField, Input, CreateCheckBox } from '../common/FormsControl/Forms-control'
+import { CreateField, Input } from '../common/FormsControl/Forms-control'
 import { NavLink, Redirect } from 'react-router-dom'
 import Style from '../common/FormsControl/Forms-control.module.css'
 import { compose } from 'redux'
-import { login } from '../../redux/profile-reduser'
+import { login } from '../../redux/profile-reducer'
 
 const LoginForm = ({handleSubmit, error, captchaUrl}) => {
     return (

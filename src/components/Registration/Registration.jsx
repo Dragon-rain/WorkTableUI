@@ -5,7 +5,7 @@ import { required } from '../../utils/validators/validators'
 import { CreateField, Input, CreateCheckBox } from '../common/FormsControl/Forms-control'
 import { Redirect } from 'react-router-dom'
 import Style from '../common/FormsControl/Forms-control.module.css'
-import { registration } from '../../redux/profile-reduser'
+import { registration } from '../../redux/profile-reducer'
 
 const RegistrationForm = ({handleSubmit, error, captchaUrl}) => {
     return (

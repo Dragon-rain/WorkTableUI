@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter, Route, withRouter } from 'react-router-dom';
 import SearchBarContaner from './components/SearchBar/SearchBarContaner';
 import { connect, Provider } from 'react-redux';
-import { initializeApp } from './redux/app-reduser';
+import { initializeApp } from './redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
 import { compose } from 'redux';
 import store from './redux/redux-store';
@@ -16,16 +16,16 @@ class App extends Component {
 
   catchAllUnhandledErrors = (promiseRejectionEvent) => {
     alert("Some error occured");
-    console.error(promiseRejectionEvent);
+    console.log(promiseRejectionEvent);
   };
 
   componentDidMount() {
     this.props.initializeApp();
-    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+    //window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+    //window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
   }
 
   render() {

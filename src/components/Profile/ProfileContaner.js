@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Profile from './Profile';
-import { Logout} from '../../redux/profile-reduser'
+import { Logout } from '../../redux/profile-reducer'
 
 class ProfileComponent extends React.Component {
 

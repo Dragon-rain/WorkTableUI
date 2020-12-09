@@ -20,7 +20,7 @@ const adminInstance = axios.create({
     headers: {
         Authorization: 'Bearer '+ Cookies.get("token")
     },
-    baseURL: 'http://localhost:8080/admin/'
+    baseURL: 'https://localhost:8080/admin/'
 })
 
 export const AuthAPI = {

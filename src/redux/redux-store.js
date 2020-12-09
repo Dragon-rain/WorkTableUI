@@ -1,17 +1,19 @@
 import thunkMiddleware from "redux-thunk";
-import contentReduser from './content-reducer';
-import profileReduser from './profile-reduser';
+import contentReducer from './content-reducer';
+import profileReducer from './profile-reducer';
 import { reducer as formReducer } from 'redux-form'
-import appReduser from "./app-reduser";
+import appReducer from "./app-reducer";
+import messageReducer from './message-reducer'
 const { createStore, combineReducers, applyMiddleware } = require("redux");
 
 
 
 let redusers = combineReducers({
-    contentPage: contentReduser,
-    profile: profileReduser, 
-    app: appReduser,
-    form: formReducer
+    contentPage: contentReducer,
+    profile: profileReducer, 
+    app: appReducer,
+    form: formReducer,
+    message: messageReducer
 
 })
 

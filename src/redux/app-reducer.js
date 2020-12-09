@@ -1,5 +1,4 @@
-import React from 'react'
-import { getUserData } from './profile-reduser'
+import { getUserData } from './profile-reducer'
 import Cookies from 'js-cookie'
 
 const INITIALIZED_SUCCES = 'INITIALIZED_SUCCES';
@@ -8,7 +7,7 @@ let initialState = {
     initialized: false
 }
 
-const appReduser = (state = initialState, action) => {
+const appReducer = (state = initialState, action) => {
     switch(action.type) {
         case INITIALIZED_SUCCES:
             return {
@@ -35,4 +34,4 @@ export const initializeApp = () => (dispatch) => {
       
 }
 
-export default appReduser;
+export default appReducer;

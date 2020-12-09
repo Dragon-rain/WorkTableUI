@@ -44,7 +44,7 @@ let mapStateToProps = (state) => ({
     totalPostsCount: state.contentPage.totalPostsCount,
     currentPage: state.contentPage.currentPage,
     isFetching: state.contentPage.faisFetchinglse,
-    message: state.contentPage.message
+    message: state.message.message
 })
 
 export default compose(connect(mapStateToProps, {requestPosts}), withRouter)(ContentContaner)
