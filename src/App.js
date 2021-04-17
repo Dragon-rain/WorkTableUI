@@ -15,7 +15,6 @@ let ProfileContaner = React.lazy(() => import('./components/Profile/ProfileConta
 class App extends Component {
 
   catchAllUnhandledErrors = (promiseRejectionEvent) => {
-    alert("Some error occured");
     console.log(promiseRejectionEvent);
   };
 
@@ -25,7 +24,7 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    //window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+   // window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
   }
 
   render() {

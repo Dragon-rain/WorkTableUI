@@ -2,6 +2,10 @@
   border-right: 1px solid gray;
 }
 
+.contentWraper {
+  margin-top: 50px;
+}
+
 .logo {
   display: flex;
   flex-direction: row;
@@ -15,4 +19,3 @@
   width: 100px;
   height: 100px;
 }
-

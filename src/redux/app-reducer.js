@@ -30,7 +30,6 @@ export const initializeApp = () => (dispatch) => {
         promise.then(() => {
             dispatch(initializedSucces())
         });
-        
       
 }
 

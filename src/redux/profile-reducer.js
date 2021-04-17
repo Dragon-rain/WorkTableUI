@@ -1,7 +1,9 @@
 import { AuthAPI } from "../api/api";
 import { encriptFormData } from "../utils/encryptors/encriptors";
-import { cookiesRemoveTokenAndUsername, cookiesSetTokenAndUsername } from '../utils/cookiesData/cookiesData';
+import { cookiesRemove, cookiesSetData } from '../utils/cookiesData/cookiesData';
 import { stopSubmit } from "redux-form";
+import Cookies from 'js-cookie'
+
 
 const SET_USER_DATA = 'profile/SET_USER_DATA';
 const GET_CAPTCHA_URL = 'profile/GET_CAPTCHA_URL'
@@ -48,10 +50,10 @@ export const getUserData = (username) => async (dispatch) => {
 export const login = (username, password, captcha) => async (dispatch) => {
     let encrypted = encriptFormData(password);
     const response = await AuthAPI.login(username, encrypted, captcha);
-    console.log(response);
     if(response.data.resultCode === 0) {
-        cookiesSetTokenAndUsername(response.data.token, response.data.user.username);
+        cookiesSetData(response.data.token, response.data.user.username, response.data.refreshToken);
         dispatch(getUserData(response.data.user.username));
+        document.location.reload()
     } else {
         let message = response.data.message ? response.data.message : "Some error";
         dispatch(stopSubmit('login', { _error: message }));
@@ -63,7 +65,7 @@ export const registration = (username, password, firstName, lastName, age, gende
     let encrypted = encriptFormData(password);
     const response = await AuthAPI.registration(username, encrypted, firstName, lastName, age, gender);
     if(response.data.resultCode === 0) {
-        cookiesSetTokenAndUsername(response.data.token, response.data.user.username);
+        cookiesSetData(response.data.token, response.data.user.username, response.data.refreshToken);
         dispatch(getUserData(response.data.user.username))
     } else {
         let message = response.data.message ? response.data.message : "Some error";
@@ -72,10 +74,10 @@ export const registration = (username, password, firstName, lastName, age, gende
     }
 }
 
-export const Logout = () => async (dispatch) => {
-    cookiesRemoveTokenAndUsername("token", "username")
+export const Logout = () => (dispatch) => {
+    AuthAPI.logout()
+    cookiesRemove();
     dispatch(setUserData(null, null, null, null, null, null, null, false)); 
-    
     
 }
 

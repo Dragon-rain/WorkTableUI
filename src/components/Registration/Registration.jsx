@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
-import { required } from '../../utils/validators/validators'
+import { maxLengthCreator, required } from '../../utils/validators/validators'
 import { CreateField, Input, CreateCheckBox } from '../common/FormsControl/Forms-control'
 import { Redirect } from 'react-router-dom'
 import Style from '../common/FormsControl/Forms-control.module.css'
@@ -10,7 +10,7 @@ import { registration } from '../../redux/profile-reducer'
 const RegistrationForm = ({handleSubmit, error, captchaUrl}) => {
     return (
             <form onSubmit={handleSubmit}>
-                {CreateField("email", "username", 'Email', Input, [required])}
+                {CreateField("email", "username", 'Email', Input, [required, maxLengthCreator(50)])}
                 {CreateField("password", "password", 'Password', Input, [required])}
                 {CreateField("password", "null", 'Repeat Password', Input, [required])}
                 {CreateField("text", "firstName", 'Your first name', Input, [required])}

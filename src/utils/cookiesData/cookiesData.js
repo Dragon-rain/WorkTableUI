@@ -1,11 +1,13 @@
 import Cookies from 'js-cookie'
 
-export const cookiesSetTokenAndUsername = (token, usernsme) => {
+export const cookiesSetData = (token, username, refreshToken) => {
     Cookies.set("token", token);
-    Cookies.set("username", usernsme);
+    Cookies.set("username", username);
+    Cookies.set("refreshToken", refreshToken);
 }
 
-export const cookiesRemoveTokenAndUsername = (token, usernsme) => {
-    Cookies.remove(token);
-    Cookies.remove(usernsme);
+export const cookiesRemove =  () => {
+    Cookies.remove("token");
+    Cookies.remove("username");
+    Cookies.remove("refreshToken");
 }

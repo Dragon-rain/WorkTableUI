@@ -12,7 +12,6 @@ const Profile = (props) => {
                  ? <div> {props.username} - <button onClick={props.Logout}>Log out</button></div>
                 : <Login/>}
             </div>
-            
         </div>
     )
 }
