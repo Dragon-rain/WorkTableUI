@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from './AddPostFormModal.module.css'
 
 
-const AddPostForm = ({addPost, togleIsClose, userId}) => {
+const AddPostForm = ({addPost, togleIsClose, userId, addPicture}) => {
 
     const [title, setTitle] = useState('')
     const [decsription, setDecsription] = useState('')
@@ -21,8 +21,9 @@ const AddPostForm = ({addPost, togleIsClose, userId}) => {
     const changePictures = (e) => {
         setFiles(e.target.files);
     }
-    const sendData = () => {
-        addPost(type, title, decsription, userId, files)
+    const sendData = async () => {
+        await addPost(type, title, decsription, userId);
+        await addPicture(files);
         togleIsClose();
     }
 

@@ -11,6 +11,7 @@ import { WithSuspence } from './components/Hok/WithSuspence';
 import ContentContaner from './components/Content/ContentContaner';
 let Registration = React.lazy(() => import('./components/Registration/Registration'));
 let ProfileContaner = React.lazy(() => import('./components/Profile/ProfileContaner'));
+let Login = React.lazy(() => import('./components/Login/Login'));
 
 class App extends Component {
 
@@ -40,8 +41,9 @@ class App extends Component {
             <ContentContaner/>
           </div>
           <div className='app-wraper-profile'>
-            <Route exact path='/' render={WithSuspence(ProfileContaner)}/>
+            {this.props.isAuth ? <Route exact path='/' render={WithSuspence(ProfileContaner)}/> : <Route exact path='/' render={WithSuspence(Login)}/> }
             <Route path='/registration' render={WithSuspence(Registration)}/>
+            <Route path='/login' render={WithSuspence(Login)}/>
           </div>
         </div>
       
@@ -50,7 +52,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  initialized: state.app.initialized
+  initialized: state.app.initialized,
+  isAuth: state.profile.isAuth
 })
 
 let AppContaner = compose(withRouter,connect(mapStateToProps, {initializeApp}))(App);

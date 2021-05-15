@@ -1,26 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { maxLengthCreator, required } from '../../utils/validators/validators'
-import { CreateField, Input, CreateCheckBox } from '../common/FormsControl/Forms-control'
-import { Redirect } from 'react-router-dom'
+import { CreateField, Input, Select, InputDisableAutoComplete } from '../common/FormsControl/Forms-control'
 import Style from '../common/FormsControl/Forms-control.module.css'
 import { registration } from '../../redux/profile-reducer'
+import { getCityList } from '../../redux/content-reducer'
+import { compose } from 'redux'
+import { WithAuthRedirectLogedIn } from '../Hok/WithAuthRedirect'
 
-const RegistrationForm = ({handleSubmit, error, captchaUrl}) => {
+const RegistrationForm = ({handleSubmit, error, captchaUrl, citylist}) => {
+
+    console.log(error)
+    
     return (
             <form onSubmit={handleSubmit}>
-                {CreateField("email", "username", 'Email', Input, [required, maxLengthCreator(50)])}
-                {CreateField("password", "password", 'Password', Input, [required])}
+                {CreateField("email", "username", 'Email', InputDisableAutoComplete, [required, maxLengthCreator(50)])}
+                {CreateField("password", "password", 'Password', InputDisableAutoComplete, [required])}
                 {CreateField("password", "null", 'Repeat Password', Input, [required])}
                 {CreateField("text", "firstName", 'Your first name', Input, [required])}
                 {CreateField("text", "lastName", 'Your last name', Input, [required])}
-                {CreateField("number", "age", 'Your age', Input, [required])}
-                {CreateField("radio", "gender", null, Input, null, {value: 'man'}, "Man")}
-                {CreateField("radio", "gender", null, Input, null, {value: 'woman'}, "Woman")}
+                {CreateField("date", "dob", null, Input, [required])}
+                {CreateField("radio", "gender", null, Input, [required], {value: 'man'}, "Man")}
+                {CreateField("radio", "gender", null, Input, [required], {value: 'woman'}, "Woman")}
+                {CreateField(null, "currentCity", null, Select, [required], {citylist: citylist})}
                 {captchaUrl && <img src={captchaUrl}/>}
                 {captchaUrl && CreateField("text", "captcha", 'Symbols from image', Input, [required])}
-                {error && <div className={Style.form_summary_error}> {error} </div>}
+                {error && alert(error)}
                 <div>
                     <button type='submit'>Registration</button>
                 </div>
@@ -28,28 +34,32 @@ const RegistrationForm = ({handleSubmit, error, captchaUrl}) => {
     )
 }
 
-const RegistrationReduxForm = reduxForm({form: 'RegistrationForm'})(RegistrationForm)
+const RegistrationReduxForm = reduxForm({form: 'registrationform'})(RegistrationForm)
 
 const Registration = (props) => {
-    const OnSubmit = (formData) => {
-        props.registration(formData.username, formData.password, formData.firstName, formData.lastName, formData.age, formData.gender)
-    }
 
-    if(props.isAuth) { 
-        return <Redirect to={'/'}/>
+    const [citylist, setCitylist] = useState(props.citylist)
+
+    useEffect(() => {
+        props.getCityList();
+    }, [citylist])
+
+    const OnSubmit = (formData) => {
+        props.registration(formData.username, formData.password, formData.firstName, formData.lastName, formData.dob, formData.gender, formData.currentCity)
     }
 
     return (
         <div className={Style.loginForm}>
             <h1>Registration</h1>
-            <RegistrationReduxForm onSubmit={OnSubmit} captchaUrl={props.captchaUrl}/>
+            <RegistrationReduxForm onSubmit={OnSubmit} captchaUrl={props.captchaUrl} citylist={props.citylist}/>
         </div>
     )
 }
 
 const mapStateToProps = (state) => ({
     captchaUrl: state.profile.captchaUrl,
-    isAuth: state.profile.isAuth
+    isAuth: state.profile.isAuth,
+    citylist: state.contentPage.cityList
 })
 
-export default connect(mapStateToProps, {registration})(Registration);
+export default compose(connect(mapStateToProps, {registration, getCityList}), WithAuthRedirectLogedIn)(Registration);

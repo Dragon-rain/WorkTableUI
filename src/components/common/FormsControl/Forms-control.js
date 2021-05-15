@@ -23,7 +23,24 @@ export const TextArea = (props) => {
 
 export const Input = (props) => {
     const {input, meta, child, ...restProps} = props;
-    return <FormControl {...props}> <input {...input} {...restProps}/> </FormControl>
+    return <FormControl  {...props}> <input  {...input} {...restProps}/> </FormControl>
+}
+
+export const InputDisableAutoComplete = (props) => {
+    const {input, meta, child, ...restProps} = props;
+    return <FormControl  {...props}> <input autoComplete='new-password' {...input} {...restProps}/> </FormControl>
+}
+
+export const Select = (props) => {
+    const {input, meta, child, ...restProps} = props;
+    return <FormControl {...props}> 
+        <select {...input} {...restProps}>
+            <option value="" hidden>Choose city</option>
+            {restProps.citylist.map(city => (
+                <option value={city.cityName} key={city.id}>{city.cityName}</option>
+            ))}
+        </select>
+    </FormControl>
 }
 
 export const CreateField = (type, name, placeholder, component, validators, props = {}, text = "") => (

@@ -1,8 +1,8 @@
-import { AuthAPI } from "../api/api";
+import { AuthAPI, UserApi } from "../api/api";
 import { encriptFormData } from "../utils/encryptors/encriptors";
 import { cookiesRemove, cookiesSetData } from '../utils/cookiesData/cookiesData';
 import { stopSubmit } from "redux-form";
-import Cookies from 'js-cookie'
+import { getAge } from "../utils/utils";
 
 
 const SET_USER_DATA = 'profile/SET_USER_DATA';
@@ -17,6 +17,8 @@ let initialState = {
     age: null,
     gender: null,
     isAuth: false,
+    profilePhoto: null,
+    currentCity: null,
     captchaUrl: null
 }
 
@@ -33,18 +35,28 @@ const ProfileReducer = (state = initialState, action) => {
     }
 }
 
-export const setUserData = (userId, username, firstName, lastName, age, gender, isAuth) => (
-    {type: SET_USER_DATA, payload: {userId, username, firstName, lastName, age, gender, isAuth}}
+export const setUserData = (userId, username, firstName, lastName, age, gender, isAuth, profilePhoto, currentCity) => (
+    {type: SET_USER_DATA, payload: {userId, username, firstName, lastName, age, gender, isAuth, profilePhoto, currentCity}}
 )
 export const GetCaptchaUrlSuccess = (captchaUrl) => ({type: GET_CAPTCHA_URL, payload: {captchaUrl}})
 
+
+
 export const getUserData = (username) => async (dispatch) => {
-    const response = await AuthAPI.getUser(username)
+    const response = await AuthAPI.getUser(username);
     if(response.data.resultCode === 0) {
         let user = response.data.user;
-        dispatch(setUserData(user.id, user.username, user.firstName, user.lastName, user.age, user.gender, true))
+        let age = getAge(user.dob);
+        dispatch(setUserData(user.id, user.username, user.firstName, user.lastName, age, user.gender, true, response.data.profilePhoto, user.currentCity));
     }
            
+}
+
+export const changeProfilePicture = (file) => async (dispatch) => {
+    const response = await UserApi.addProfilePicture(file)
+    if(response.data.resultCode === 0) {
+        dispatch(getUserData(response.data.username));
+    }
 }
 
 export const login = (username, password, captcha) => async (dispatch) => {
@@ -61,15 +73,15 @@ export const login = (username, password, captcha) => async (dispatch) => {
     }
 }
 
-export const registration = (username, password, firstName, lastName, age, gender) => async (dispatch) => {
+export const registration = (username, password, firstName, lastName, dob, gender, currentCity) => async (dispatch) => {
     let encrypted = encriptFormData(password);
-    const response = await AuthAPI.registration(username, encrypted, firstName, lastName, age, gender);
+    const response = await AuthAPI.registration(username, encrypted, firstName, lastName, dob, gender, currentCity);
     if(response.data.resultCode === 0) {
         cookiesSetData(response.data.token, response.data.user.username, response.data.refreshToken);
         dispatch(getUserData(response.data.user.username))
     } else {
         let message = response.data.message ? response.data.message : "Some error";
-        dispatch(stopSubmit('RegistrationForm', { _error: message }));
+        dispatch(stopSubmit('registrationform', { _error: message }));
         return Promise.reject(response.data.message);
     }
 }
@@ -77,7 +89,7 @@ export const registration = (username, password, firstName, lastName, age, gende
 export const Logout = () => (dispatch) => {
     AuthAPI.logout()
     cookiesRemove();
-    dispatch(setUserData(null, null, null, null, null, null, null, false)); 
+    dispatch(setUserData(null, null, null, null, null, null, null, false, null, null)); 
     
 }
 

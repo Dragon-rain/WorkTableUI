@@ -13,7 +13,15 @@
     color: red;
 }
 
+.form_summary_error_r {
+    border: red 1px solid;
+    padding: 5px;
+    color: red;
+}
+
 .loginForm {
     text-align: center;
     
 }
+
+

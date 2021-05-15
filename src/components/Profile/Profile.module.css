@@ -9,3 +9,7 @@
   margin-top: 50px;
 }
 
+.profilePhoto {
+  max-width: 30vh;
+  max-height: 40vh;
+}

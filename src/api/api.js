@@ -1,13 +1,10 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import tokenFilter from '../utils/token-filter'
 
 const x_token = Cookies.get("token")
 const x_refresh_token = Cookies.get("refreshToken")
 const username = Cookies.get('username')
-
-axios.interceptors.request.use(request=> {
-    console.log(request)
-})
 
 const mainInstance = axios.create({
     baseURL: 'http://localhost:8080/main/'
@@ -40,21 +37,30 @@ const adminInstance = axios.create({
     
 })
 
+//inerseptor with bugs
+userInstance.interceptors.response.use(response => {
+    return response;
+    },
+    async (error) => {
+       await tokenFilter(error)
+    }
+)
+
 export const AuthAPI = {
 
     login(username, password, captcha=null) {
         return authInstance.post(`login`, {username, password, captcha});
     },
 
-    registration(username, password, firstName, lastName, age, gender) {
-        return authInstance.post(`registration`, {username, password, firstName, lastName, age, gender});
+    registration(username, password, firstName, lastName, dob, gender, currentCity) {
+        return authInstance.post(`registration`, {username, password, firstName, lastName, dob, gender, currentCity});
     },
 
     getUser(username) {
         return authInstance.post(`authme`, {username});
     }, 
 
-    refresh(username) {
+    refresh() {
         return authInstanceRefresh.post(`refresh`, {username})
     },
 
@@ -72,12 +78,15 @@ export const MainAPI = {
 
     getPictures(name) {
         return mainInstance.get(`pictures?name=${name}`)
+    },
+
+    getCityList() {
+        return mainInstance.get(`city/list`)
     }
 
 }
 
 export const UserApi = {
-
     postPost(type, title, description, userId) {
         console.log(Cookies.get("token"))
         return userInstance.put(`addpost`, {type, title, description, userId})
@@ -91,6 +100,18 @@ export const UserApi = {
         }
         console.log("pictures")
         return userInstance.put(`addpicture`, files)
+    },
+
+    addProfilePicture(file) {
+        const formData = new FormData();
+        formData.append("file", file)
+
+        return userInstance.put(`addProfilePicture`, formData, {
+            headers: {
+                'Content-Type' : 'multipart/form-data',
+                'username' : username
+            }
+        })
     }
 
 }

@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { required } from '../../utils/validators/validators'
 import { CreateField, Input } from '../common/FormsControl/Forms-control'
-import { NavLink, Redirect } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Style from '../common/FormsControl/Forms-control.module.css'
 import { compose } from 'redux'
 import { login } from '../../redux/profile-reducer'
+import { WithAuthRedirectLogedIn } from '../Hok/WithAuthRedirect'
 
 const LoginForm = ({handleSubmit, error, captchaUrl}) => {
+    
     return (
             <form onSubmit={handleSubmit}>
                 {CreateField("text", "username", 'Email', Input, [required])}
@@ -32,10 +34,6 @@ const Login = (props) => {
         props.login(formData.username, formData.password, formData.captcha)
     }
 
-    if(props.isAuth) { 
-        return <Redirect to={'/profile'}/>
-    }
-
     return (
         <div className={Style.loginForm}>
             <h1>Login</h1>
@@ -52,4 +50,4 @@ const mapStateToProps = (state) => ({
     isAuth: state.profile.isAuth
 })
 
-export default compose(connect(mapStateToProps, {login}))(Login);
+export default compose(connect(mapStateToProps, {login}), WithAuthRedirectLogedIn)(Login);

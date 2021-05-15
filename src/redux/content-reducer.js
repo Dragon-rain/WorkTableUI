@@ -1,7 +1,6 @@
-import { AuthAPI, MainAPI, UserApi } from "../api/api";
-import AuthFilter from "../utils/AuthFilter/AuthFilter";
+import { MainAPI, UserApi } from "../api/api";
+import tokenFilter from "../utils/token-filter";
 import { setMessage } from './message-reducer'
-import Cookies from 'js-cookie'
 
 const ADD_POST = 'content/ADD-POST';
 const SET_POSTS ='content/SET_USERS';
@@ -9,6 +8,7 @@ const SET_CURRENT_PAGE ='content/SET_CURRENT_PAGE';
 const SET_TOTAL_POSTS_COUNT = 'content/SET_TOTAL_USERS_COUNT';
 const TOGGLE_IS_FETCHING = 'content/TOGGLE_IS_FETCHING';
 const SET_PICTURES = 'content/SET_PICTURES';
+const SET_CITY_LIST = 'content/SET_CITY_LIST'
 
 let initialState = {
     posts: [],
@@ -16,7 +16,8 @@ let initialState = {
     pageSize: 10,
     totalPostsNumber: 0,
     currentPage: 1,
-    isFetching: false
+    isFetching: false,
+    cityList: []
 }
 
 const _addPost = (state, text) => {
@@ -46,6 +47,7 @@ const contentReducer = (state = initialState, action) => {
         case SET_POSTS:
         case SET_TOTAL_POSTS_COUNT: 
         case TOGGLE_IS_FETCHING:
+        case SET_CITY_LIST:
             return {...state, ...action.payload};
 
         default:
@@ -61,6 +63,7 @@ export const setPictures = (pictures) => ({type: SET_PICTURES, payload: {picture
 export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, currentPage});
 export const setTotalPostsCount = (totalPostsNumber) => ({type: SET_TOTAL_POSTS_COUNT, payload: {totalPostsNumber}});
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, payload: {isFetching}});
+export const setCityList = (cityList) => ({type: SET_CITY_LIST, payload: {cityList}});
 
 export const requestPosts = (currentPage, pageSize) => async (dispatch) => {
     dispatch(toggleIsFetching(true));
@@ -76,28 +79,33 @@ export const requestPosts = (currentPage, pageSize) => async (dispatch) => {
 
 }
 
-export const addPost = (type, title, description, userId, files) => async (dispatch) => {
-    const responsePost = await UserApi.postPost(type, title, description, userId, files).catch(async e => {
-        console.log(e.response.status);
-        if(e.response.status===403) {
-            
-            const username = Cookies.get("username")
-            const response = await AuthAPI.refresh(username);
-            AuthFilter(response);
-            console.log(Cookies.get("token"))
-            console.log("token refreshed")
-            document.location.reload()
-            
-        }
-    });
-    const responsePicture = await UserApi.postPicture(files);
-
-
-    if(responsePost.data.resultCode === 0 && responsePicture.data.resultCode === 0) {
+export const addPost = (type, title, description, userId) => async (dispatch) => {
+    const response = await UserApi.postPost(type, title, description, userId)
+    if(response.data.resultCode === 0) {
         let currentPage, pageSize;
         dispatch(requestPosts(currentPage, pageSize));
     }
 
+}
+
+export const addPicture = (files) => async (dispatch) => {
+    const response = await UserApi.postPicture(files);
+    if(response.data.resultCode === 0) {
+        let currentPage, pageSize;
+        dispatch(requestPosts(currentPage, pageSize));
+    }
+}
+
+export const getCityList = () => async (dispatch) => {
+    const response = await MainAPI.getCityList();
+    if(response.data.resultCode === 0) {
+        dispatch(setCityList(response.data.cityList));
+    }
+    return Promise.resolve(response.data.cityList)
+}
+
+export const cityDistrictList = () => async (dispatch) => {
+    
 }
 
 

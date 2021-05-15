@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Content from './Content'
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-import { requestPosts, addPost } from '../../redux/content-reducer'
+import { requestPosts, addPost, addPicture } from '../../redux/content-reducer'
 
 
 
@@ -47,4 +47,4 @@ let mapStateToProps = (state) => ({
     isAuth: state.profile.isAuth
 })
 
-export default compose(connect(mapStateToProps, {requestPosts, addPost}), withRouter)(ContentContaner)
+export default compose(connect(mapStateToProps, {requestPosts, addPost, addPicture}), withRouter)(ContentContaner)
