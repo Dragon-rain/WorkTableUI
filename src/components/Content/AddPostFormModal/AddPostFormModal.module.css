@@ -7,13 +7,41 @@
     background: rgba(0, 0, 0, .5);
     display: flex;
     justify-content: center;
-    padding-top: 5rem;
+    padding-top: 5vh;
 }
 
 .modal_body {
-    padding: 2rem;
+    padding: 2vh;
     width: 400px;
     border-radius: 5px;
     background: #fff;
-    height: 200px;
+    height: 400px;
+}
+
+.form_body {
+    max-width: 100%;
+    max-height: 100%;
+}
+.modal_form {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.modal_form h1{
+    margin: 0 auto;
+}
+
+.modal_form input{
+    width: 90%;
+}
+
+.modal_form textarea{
+    width: 91%;
+    height: 100px;
+    resize: none;
+}
+
+.modal_form div{
+    padding-top: 10px;
 }

@@ -31,14 +31,28 @@ export const InputDisableAutoComplete = (props) => {
     return <FormControl  {...props}> <input autoComplete='new-password' {...input} {...restProps}/> </FormControl>
 }
 
-export const Select = (props) => {
+export const SelectCity = (props) => {
     const {input, meta, child, ...restProps} = props;
+    
     return <FormControl {...props}> 
-        <select {...input} {...restProps}>
+        <select {...input} {...restProps} >
             <option value="" hidden>Choose city</option>
+            <option value="null" hidden>Not in Korea</option>
             {restProps.citylist.map(city => (
                 <option value={city.cityName} key={city.id}>{city.cityName}</option>
             ))}
+        </select>
+    </FormControl>
+}
+
+export const SelectDistrict = (props) => {
+    const {input, meta, child, cityId, districtlist, ...restProps} = props;
+    return <FormControl {...props}> 
+        <select {...input} {...restProps}>
+            {cityId!=='null' && cityId? <option value="null">Choose district</option>: <option value="null">Choose city first</option>}
+            {cityId!=='null' && cityId? districtlist.map(district => (
+                <option value={district.id} key={district.id}>{district.districtName}</option>
+            )): <option value="null">Choose city first</option>}
         </select>
     </FormControl>
 }

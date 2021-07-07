@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 import { maxLengthCreator, required } from '../../utils/validators/validators'
-import { CreateField, Input, Select, InputDisableAutoComplete } from '../common/FormsControl/Forms-control'
+import { CreateField, Input, SelectCity, InputDisableAutoComplete } from '../common/FormsControl/Forms-control'
 import Style from '../common/FormsControl/Forms-control.module.css'
 import { registration } from '../../redux/profile-reducer'
 import { getCityList } from '../../redux/content-reducer'
@@ -10,8 +10,6 @@ import { compose } from 'redux'
 import { WithAuthRedirectLogedIn } from '../Hok/WithAuthRedirect'
 
 const RegistrationForm = ({handleSubmit, error, captchaUrl, citylist}) => {
-
-    console.log(error)
     
     return (
             <form onSubmit={handleSubmit}>
@@ -23,7 +21,7 @@ const RegistrationForm = ({handleSubmit, error, captchaUrl, citylist}) => {
                 {CreateField("date", "dob", null, Input, [required])}
                 {CreateField("radio", "gender", null, Input, [required], {value: 'man'}, "Man")}
                 {CreateField("radio", "gender", null, Input, [required], {value: 'woman'}, "Woman")}
-                {CreateField(null, "currentCity", null, Select, [required], {citylist: citylist})}
+                {CreateField(null, "currentCity", null, SelectCity, null, {citylist: citylist})}
                 {captchaUrl && <img src={captchaUrl}/>}
                 {captchaUrl && CreateField("text", "captcha", 'Symbols from image', Input, [required])}
                 {error && alert(error)}

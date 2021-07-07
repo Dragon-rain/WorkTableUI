@@ -37,11 +37,13 @@ const adminInstance = axios.create({
     
 })
 
-//inerseptor with bugs
+
+//inerseptor
 userInstance.interceptors.response.use(response => {
     return response;
     },
     async (error) => {
+        console.log(error)
        await tokenFilter(error)
     }
 )
@@ -72,8 +74,8 @@ export const AuthAPI = {
 
 export const MainAPI = {
 
-    getAllPosts(currentPage = 1, pageSize = 10) {
-        return mainInstance.get(`posts?currentPage=${currentPage}&pageSize=${pageSize}`);
+    getAllPosts(currentPage = 1, pageSize = 10, keyword = "null", type = "null", cityId = "null", districtId = "null") {
+        return mainInstance.post(`posts`, {currentPage, pageSize, keyword, type, cityId ,districtId});
     },
 
     getPictures(name) {
@@ -82,24 +84,38 @@ export const MainAPI = {
 
     getCityList() {
         return mainInstance.get(`city/list`)
-    }
-
-}
-
-export const UserApi = {
-    postPost(type, title, description, userId) {
-        console.log(Cookies.get("token"))
-        return userInstance.put(`addpost`, {type, title, description, userId})
     },
 
-    postPicture(newfiles) {
-        const files = new FormData();
+    getDistrictsList() {
+        return mainInstance.get(`district/list`)
+    }
 
+
+};
+
+export const UserApi = {
+    postPost(type, title, description, userId, cityId, districtId, newfiles) {
+        console.log(Cookies.get("token"))
+        let data = JSON.stringify({
+            'type': type, 
+            'title': title, 
+            'description': description,
+            'userId': userId,
+            'cityId': cityId,
+            'districtId': districtId
+        });
+        const files = new FormData();
         for(let i = 0; i < newfiles.length; i++) {
             files.append("files", newfiles[i], newfiles[i].name)
         }
-        console.log("pictures")
-        return userInstance.put(`addpicture`, files)
+        files.append("data", data)
+        return userInstance.put(`addpost`, files, {
+            headers: {
+                'enctype' : 'multipart/form-data',
+                'Content-Type' : false,
+                'processData' : false
+            }
+        })
     },
 
     addProfilePicture(file) {

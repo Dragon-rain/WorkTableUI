@@ -9,6 +9,7 @@ import { compose } from 'redux';
 import store from './redux/redux-store';
 import { WithSuspence } from './components/Hok/WithSuspence';
 import ContentContaner from './components/Content/ContentContaner';
+import { getCityList, getDistrictsList } from './redux/content-reducer'
 let Registration = React.lazy(() => import('./components/Registration/Registration'));
 let ProfileContaner = React.lazy(() => import('./components/Profile/ProfileContaner'));
 let Login = React.lazy(() => import('./components/Login/Login'));
@@ -21,6 +22,8 @@ class App extends Component {
 
   componentDidMount() {
     this.props.initializeApp();
+    this.props.getCityList();
+    this.props.getDistrictsList();
     //window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
   }
 
@@ -56,7 +59,7 @@ const mapStateToProps = (state) => ({
   isAuth: state.profile.isAuth
 })
 
-let AppContaner = compose(withRouter,connect(mapStateToProps, {initializeApp}))(App);
+let AppContaner = compose(withRouter,connect(mapStateToProps, {initializeApp, getCityList, getDistrictsList}))(App);
 
 const WorkTableApp = (props) => {
   return <BrowserRouter>
