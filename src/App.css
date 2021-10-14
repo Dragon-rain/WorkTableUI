@@ -1,10 +1,10 @@
 .app-wraper {
-  margin: 0 auto;
   display: grid;
-  grid-template-areas: 
-  "n cc p";
-  grid-template-rows: 2fr 1fr;
   grid-template-columns: 3fr 6fr 2fr 1fr;
+}
+
+.app-wraper-nav {
+  border-right: 1px solid #E6E6E6;
 }
 
 .app-wraper-content {
@@ -12,6 +12,32 @@
 }
 
 .app-wraper-profile {
-  grid-area: p;
   background-color: #F8F9FA;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .app-wraper {
+    display: grid;
+    grid-template-columns: 12fr;
+  }
+
+  .app-wraper-content {
+    background-color: white;
+  }
+
+}
+@media only screen and (max-width: 1024px) {
+  .app-wraper {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+  }
+  
+  .app-wraper-nav {
+    border-right: 1px solid #E6E6E6;
+  }
+  
+  .app-wraper-content {
+    background-color: white;
+  }
 }

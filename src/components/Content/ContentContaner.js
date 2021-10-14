@@ -10,14 +10,26 @@ import { requestPosts, addPost, getCityList, getDistrictsList } from '../../redu
 class ContentContaner extends React.Component {
 
     componentDidMount() {
-        const {currentPage, pageSize} = this.props;
-        this.props.requestPosts(currentPage, pageSize);
+        const {currentPage, pageSize, keyword, type, cityId, districtId} = this.props;
+        const userId = this.props.match.params.userId
+        if(userId) {
+            this.props.requestPosts(currentPage, pageSize, keyword, type, cityId, districtId, userId)
+            console.log('requestUserPosts')
+        } else {
+            this.props.requestPosts(currentPage, pageSize, keyword, type, cityId, districtId, userId);
+            console.log('requestPosts')
+        }
         
     };
 
     onPageChanged = (pageNumber) => {
         const {pageSize, keyword, type, cityId, districtId} = this.props;
-        this.props.requestPosts(pageNumber, pageSize, keyword, type, cityId, districtId);
+        const userId = this.props.match.params.userId
+        if(userId) {
+            this.props.requestPosts(pageNumber, pageSize, keyword, type, cityId, districtId, userId)
+        } else {
+            this.props.requestPosts(pageNumber, pageSize, keyword, type, cityId, districtId);
+        }
     };
 
     getDistrictsListByCityId = (cityId) => {
@@ -25,10 +37,8 @@ class ContentContaner extends React.Component {
         return districtsListByCityId;
     }
 
-    getCityById = (cityId) => {
-        const city = this.props.cityList.find(citys => {if(citys.id === cityId) return citys})
-        console.log(city)
-        return city;
+    returnPage = () => {
+        this.props.history.go(-1)
     }
 
     render() {
@@ -40,13 +50,14 @@ class ContentContaner extends React.Component {
                     posts = {this.props.posts}
                     onPageChanged = {this.onPageChanged}
                     getDistrictsListByCityId = {this.getDistrictsListByCityId}
-                    getCityById = {this.getCityById}
+                    requestPosts = {this.props.requestPosts}
                     addPost = {this.props.addPost}
                     isAuth = {this.props.isAuth}
                     cityList = {this.props.cityList}
-                    districtsList = {this.props.districtsList}
                     userId = {this.props.userId}
-                    message = {this.props.message}/>
+                    message = {this.props.message}
+                    returnPage = {this.returnPage}
+                    userPostsCount = {this.props.userPostsCount}/>
             </div>
         )
     }
@@ -66,7 +77,8 @@ let mapStateToProps = (state) => ({
     keyword: state.contentPage.keyword,
     type: state.contentPage.type,
     cityId: state.contentPage.cityId,
-    districtId: state.contentPage.districtId
+    districtId: state.contentPage.districtId,
+    userPostsCount: state.profile.userPostsCount
 })
 
 export default compose(connect(mapStateToProps, {requestPosts, addPost, getCityList, getDistrictsList}), withRouter)(ContentContaner)

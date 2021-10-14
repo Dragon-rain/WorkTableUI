@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import Logo from '../../assets/images/Logo-1.png'
 import Style from './SearchBar.module.css'
 import SearchBarReduxForm from './SearchBarForm'
@@ -9,14 +10,17 @@ const SearchBar = (props) => {
     <div className={Style.searhBar}>
       <div className={Style.contentWraper}>
         <div className={Style.logo}>
-          <img src={Logo}/>
-          <h2>Work Table</h2>
+          <NavLink to={'/'}>
+            <span><img src={Logo}/></span>
+            <span><h2>Work Table</h2></span>
+          </NavLink>
         </div>
-        <div>
+        <div className={Style.form}>
           <SearchBarReduxForm requestPosts={props.requestPosts} 
                               getDistrictsListByCityId={props.getDistrictsListByCityId} 
                               citylist={props.citylist} 
                               pageSize={props.pageSize}
+                              searchComplete={props.searchComplete}
                               setKeyword={props.setKeyword}
                               setType={props.setType}
                               setCityId={props.setCityId}
@@ -25,7 +29,8 @@ const SearchBar = (props) => {
                               type={props.type}
                               cityId={props.cityId}
                               districtId={props.districtId}
-                              currentPage={props.currentPage}/>
+                              currentPage={props.currentPage}
+                              userId={props.userId}/>
         </div>
       </div>
     </div>

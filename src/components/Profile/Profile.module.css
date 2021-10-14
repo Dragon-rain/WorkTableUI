@@ -1,5 +1,4 @@
 .profile {
-    grid-area: p;
     background-color: #F8F9FA;
 }
 
@@ -10,6 +9,23 @@
 }
 
 .profilePhoto {
+  text-align: center;
+}
+
+.profilePhoto div{
+  text-align: left;
+  font-size: small;
+}
+
+.profilePhoto img {
   max-width: 30vh;
   max-height: 40vh;
+}
+
+.profileInfo {
+  padding: 1em;
+}
+
+.profileInfo div{
+  padding: 1em;
 }

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import style from './AddPostFormModal.module.css'
 
 
-const AddPostForm = ({addPost, togleIsClose, userId, cityList, districtsList, ...props}) => {
+const AddPostForm = ({addPost, togleIsClose, userId, cityList, ...props}) => {
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [type, setType] = useState("other")
     const [files, setFiles] = useState([])
     const [citys, setCitys] = useState([cityList])
-    const [districts, setDistricts] = useState([districtsList])
+    const [districts, setDistricts] = useState([])
     const[cityId, setCityId] = useState('')
     const[districtId, setDistrictId] = useState('')
 
@@ -25,9 +25,14 @@ const AddPostForm = ({addPost, togleIsClose, userId, cityList, districtsList, ..
     }
 
     const changeCity = (e) => {
-        const getDistrictsListByCityId = props.getDistrictsListByCityId(e.target.value)
-        setDistricts(getDistrictsListByCityId)
-        setCityId(e.target.value);
+        let id = e.target.value
+        setCityId(id)
+        setDistricts(props.getDistrictsListByCityId(id))
+        if(id==="0") {
+            setDistrictId(0)
+            console.log("district id changed ", districtId)
+        }
+        console.log(e.target.value)
     }
 
     const changeDistrict = (e) => {
@@ -47,36 +52,32 @@ const AddPostForm = ({addPost, togleIsClose, userId, cityList, districtsList, ..
         setCitys(cityList)
     }, [cityList])
 
-    useEffect(()=> {
-        setDistricts(districtsList)
-    }, [districtsList])
-
     return (
             <div className={style.modal_form}>
                 <h1>Post</h1>
                 <div>
                     <label>Title:</label><br/>
-                    <input type='text' name='title' value={title} onChange={changeTitle}/>
+                    <input type='text' name='title' maxLength={60} value={title} onChange={changeTitle}/>
                 </div>
                 <div>
                     <label>Description:</label><br/>
-                    <textarea  name='description' value={description} onChange={changeDescription}/>
+                    <textarea  name='description' maxLength={2000} value={description} onChange={changeDescription}/>
                 </div>
                 <div>
                     <label>Type: </label> 
                     <select name='type' defaultValue={type} onChange={changeType}>
-                        <option key="1" value="other">Choose type</option>
-                        <option key="2" value="work">Work</option>
-                        <option key="3" value="trade">Trade</option>
-                        <option key="4" value="service">Service</option>
-                        <option key="5" value="rent">Rent</option>
-                        <option key="6" value="other">Other</option>
+                        <option key={1} value="other">Choose type</option>
+                        <option key={2} value="work">Work</option>
+                        <option key={3} value="trade">Trade</option>
+                        <option key={4} value="service">Service</option>
+                        <option key={5} value="rent">Rent</option>
+                        <option key={6} value="other">Other</option>
                     </select>
                 </div>
                 <div>
                     <label>City: </label> 
-                    <select name='city' defaultValue="null" onChange={changeCity}>
-                        <option key="1" value="null">Choose city</option>
+                    <select name='city' defaultValue={0} onChange={changeCity}>
+                        <option key="10000" value={0}>Choose city</option>
                         {citys.map(city => (
                             <option value={city.id} key={city.id}>{city.cityName}</option>
                         ))}
@@ -84,11 +85,11 @@ const AddPostForm = ({addPost, togleIsClose, userId, cityList, districtsList, ..
                 </div>
                 <div>
                     <label>District: </label> 
-                    <select key="1" name='district' defaultValue="null" onChange={changeDistrict}>
-                        {cityId!=='null' && cityId? <option value="null">Choose district</option>: <option value="null">Choose city first</option>}
-                        {cityId!=='null' && cityId? districts.map(district => (
+                    <select name='district' defaultValue="null" onChange={changeDistrict}>
+                        {cityId!=='' && cityId? <option value={0} key={0}>Choose district</option>: <option value={0} key={0} >Choose city first</option>}
+                        {cityId!=='' && cityId? districts.map(district => (
                             <option value={district.id} key={district.id}>{district.districtName}</option>
-                        )): <option value="null">Choose city first</option>}
+                        )): <option value={0} key={districts.length+1}>Choose city first</option>}
                     </select>
                 </div>
                 <div>
@@ -116,7 +117,7 @@ const AddPostFormModal = (props) => {
     }
 
     return (
-        <div>
+        <span>
             <button onClick={togleIsOpen}>Add Post</button>         
             {isOpen && (<div className={style.modal}>
                 <div className={style.modal_body}>
@@ -129,7 +130,7 @@ const AddPostFormModal = (props) => {
                                                              togleIsClose={togleIsClose}/>
                 </div>
             </div>)}
-        </div>
+        </span>
     )
     
 }

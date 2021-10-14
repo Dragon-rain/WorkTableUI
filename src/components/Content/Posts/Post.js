@@ -1,4 +1,5 @@
 import React from 'react' 
+import { NavLink } from 'react-router-dom';
 import { MainAPI } from '../../../api/api';
 import { time_ago } from '../../../utils/utils';
 import Class from './Post.module.css'
@@ -10,7 +11,7 @@ class Post extends React.Component {
     }
 
     findPictures() {
-        MainAPI.getPictures(this.props.post.name).then(
+        MainAPI.getPictures(this.props.post.id).then(
             response => {
                 this.setState({pictures: response.data.pictures});
             }
@@ -28,33 +29,30 @@ class Post extends React.Component {
         
     }
     
-
+    
     render() {
-        
         return(
-            <div className={Class.item}> 
-                <div>
-                    <h2>{this.props.post.title}</h2>
+            <div className={Class.postContaner}> 
+                <div className={Class.title}>
+                    <NavLink to={'/post-details/'+this.props.post.id}><h2>{this.props.post.title}</h2></NavLink>
                 </div>
-                <div>
+                <div className={Class.info}>
+                    <span>{time_ago(this.props.post.created)}</span>
                     <span>Type: {this.props.post.type}</span>
-                </div>
-                <div>
-                    <span>{this.props.post.description}</span>
-                </div>
-                <div>
                     <span>{this.props.post.cityname}</span>
-                </div>
-                <div>
                     <span>{this.props.post.district? this.props.post.district.districtName: ""}</span>
                 </div>
-                <div>
-                    {this.state.pictures.map(p => (
-                        <div key={p.path}><img key={p.path} src={p.path} alt=''/></div>
-                    ))}
+                <div className={Class.description}>
+                    <span>{this.props.post.description}</span>
                 </div>
-                <div>
-                    <span>{time_ago(this.props.post.created)}</span>
+                {this.state.pictures.length !== 0 ?
+                <div className={Class.pictures}>
+                    {this.state.pictures.map(p => (
+                        <span key={p.path}><img key={p.path} src={p.path} alt=''/></span>
+                    ))}
+                </div>: <div></div>}
+                <div className={Class.readMore}>
+                    <NavLink to={'/post-details/'+this.props.post.id}>Read more</NavLink>
                 </div>
             </div>
         )

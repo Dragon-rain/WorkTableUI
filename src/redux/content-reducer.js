@@ -8,11 +8,13 @@ const SET_TOTAL_POSTS_COUNT = 'content/SET_TOTAL_USERS_COUNT';
 const TOGGLE_IS_FETCHING = 'content/TOGGLE_IS_FETCHING';
 const SET_PICTURES = 'content/SET_PICTURES';
 const SET_CITY_LIST = 'content/SET_CITY_LIST';
-const SET_DISTRICTS_LIST = 'content/SET_DISTRICTS_LIST'
-const SET_KEYWORD = 'content/SET_KEYWORD'
-const SET_TYPE = 'content/SET_TYPE'
-const SET_CITYID = 'content/SET_CITYID'
-const SET_DISTRICTID = 'content/SET_DISTRICTID'
+const SET_DISTRICTS_LIST = 'content/SET_DISTRICTS_LIST';
+const SET_KEYWORD = 'content/SET_KEYWORD';
+const SET_TYPE = 'content/SET_TYPE';
+const SET_CITYID = 'content/SET_CITYID';
+const SET_DISTRICTID = 'content/SET_DISTRICTID';
+const SET_POST = 'content/SET_POST';
+const EDITED_POST = 'content/EDITED_POST'
 
 let initialState = {
     posts: [],
@@ -26,7 +28,8 @@ let initialState = {
     keyword: "null",
     type: "null",
     cityId: "null",
-    districtId: "null"
+    districtId: "null",
+    post: []
 }
 
 const _addPost = (state, text) => {
@@ -51,7 +54,8 @@ const contentReducer = (state = initialState, action) => {
 
         case SET_CURRENT_PAGE: 
             return {...state, currentPage: action.currentPage};
-
+        case EDITED_POST:
+            return {...state, post: {...state.post, ...action.payload.post}}
         case SET_PICTURES: 
         case SET_POSTS:
         case SET_TOTAL_POSTS_COUNT: 
@@ -62,6 +66,7 @@ const contentReducer = (state = initialState, action) => {
         case SET_TYPE:
         case SET_CITYID:
         case SET_DISTRICTID:
+        case SET_POST:
             return {...state, ...action.payload};
 
         default:
@@ -83,11 +88,13 @@ export const setKeyword = (keyword) => ({type: SET_KEYWORD, payload: {keyword}})
 export const setType = (type) => ({type: SET_TYPE, payload: {type}});
 export const setCityId = (cityId) => ({type: SET_CITYID, payload: {cityId}});
 export const setDistrictId = (districtId) => ({type: SET_DISTRICTID, payload: {districtId}});
+export const setPost = (post) => ({type: SET_POST, payload: {post}})
+export const editedPost = (post) => ({type: EDITED_POST, payload: {post}})
 
-export const requestPosts = (currentPage, pageSize, keyword, type, cityId, districtId) => async (dispatch) => {
+export const requestPosts = (currentPage, pageSize, keyword, type, cityId, districtId, username) => async (dispatch) => {
     dispatch(toggleIsFetching(true));
     dispatch(setCurrentPage(currentPage))
-    const response = await MainAPI.getAllPosts(currentPage, pageSize, keyword, type, cityId, districtId);
+    const response = await MainAPI.getAllPosts(currentPage, pageSize, keyword, type, cityId, districtId, username);
     if(response.data.resultCode === 0) {
         dispatch(toggleIsFetching(false));
         dispatch(setPosts(response.data.posts));
@@ -122,6 +129,32 @@ export const getDistrictsList = () => async (dispatch) => {
         dispatch(setDistrictsList(response.data.districtsList));
     }
     return Promise.resolve(response.data.districtsList)
+}
+
+export const getPostById = (id) => async (dispatch) => {
+    const response = await MainAPI.findPostById(id);
+    if(response.data.resultCode === 0) {
+        dispatch(setPost(response.data.post))
+    }
+}
+
+export const saveEditedPost = (newPost, newFiles) => async (dispatch) => {
+    let post = JSON.stringify({
+        'id': newPost.id, 
+        'title': newPost.title,
+        'description': newPost.description, 
+        'type': newPost.type, 
+        'cityId': newPost.cityId, 
+        'districtId': newPost.districtId,
+    })
+    const response = await UserApi.editPost(post, newFiles)
+    if(response.data.resultCode === 0) {
+        dispatch(editedPost(newPost))
+    }
+}
+
+export const deletePost = (postId) => async (dispatch) => {
+    await UserApi.deletePost(postId)
 }
 
 

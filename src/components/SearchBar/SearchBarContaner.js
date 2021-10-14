@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import SearchBar from './SearchBar'
 import { requestPosts, setKeyword, setType, setCityId, setDistrictId } from '../../redux/content-reducer'
+import { compose } from 'redux'
+import { withRouter } from 'react-router'
 
 const SearchBarContaner = (props) => {
 
@@ -10,8 +12,14 @@ const SearchBarContaner = (props) => {
       return districtsListByCityId;
     }
 
+    const searchComplete = () => {
+      console.log('here')
+      props.history.push('/')
+    } 
+
     return <SearchBar getDistrictsListByCityId={getDistrictsListByCityId}
                       citylist={props.citylist}
+                      searchComplete={searchComplete}
                       requestPosts={props.requestPosts}
                       pageSize={props.pageSize}
                       setKeyword={props.setKeyword}
@@ -22,7 +30,8 @@ const SearchBarContaner = (props) => {
                       type={props.type}
                       cityId={props.cityId}
                       districtId={props.districtId}
-                      currentPage={props.currentPage}/>
+                      currentPage={props.currentPage}
+                      userId={props.match.params.userId}/>
 }
 
 let mapStateToProps = (state) => ({
@@ -37,4 +46,4 @@ let mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps, {requestPosts, setKeyword, setType, setCityId, setDistrictId})(SearchBarContaner);
+export default compose(connect(mapStateToProps, {requestPosts, setKeyword, setType, setCityId, setDistrictId}), withRouter)(SearchBarContaner);

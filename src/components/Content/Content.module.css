@@ -1,16 +1,34 @@
 .contener {
     margin: 0 auto;
     max-width: 70%;
-    margin-left: 20%;
     margin-top: 50px;
 }
 
-.addPostButtom {
+.contenerHead {
+    margin-bottom: 5rem;
+}
+
+.addPostPannel {
     float: right;
 }
 
+.addPostPannel span {
+    margin: 0.4rem;
+    cursor: pointer;
+}
+
+.addPostPannel img {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
+}
+
+.addPostPannel span a{
+    color: #1EAFED;
+    text-decoration: none;
+}
+
 .paginator {
-    display: block;
     margin-left: auto;
     margin-right: auto;
 }

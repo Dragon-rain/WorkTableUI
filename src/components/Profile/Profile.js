@@ -10,8 +10,13 @@ const Profile = ({user, changeProfilePicture, Logout, ...props}) => {
 
     const onMainPhotoSelected = (e) => {
         if(e.target.files[0]){
-            changeProfilePicture(e.target.files[0])
+            changeProfilePicture(user.userId, e.target.files[0])
         };
+    }
+
+    const onLogout = () => {
+        props.history.push('/')
+        Logout()
     }
 
     return (
@@ -19,15 +24,18 @@ const Profile = ({user, changeProfilePicture, Logout, ...props}) => {
             <div className={Style.loginBlock}>
                 {props.isFetching ? <Preloader/> : null}
                 {props.isAuth 
-                 ? <div>
-                        <img className={Style.profilePhoto} alt="" src={user.profilePhoto || UserPhoto}/>
-                        <div><input type={"file"} onChange={onMainPhotoSelected}/></div>
-                        <div>{user.username} - <button onClick={Logout}>Log out</button></div>
-                        <div>{user.firstName}</div>
-                        <div>{user.lastName}</div>
-                        <div>{user.gender}</div>
-                        <div>{user.currentCity}</div>
-                        <div>{user.age}</div>
+                 ? <div className={Style.profileInfo}>
+                        <div>Welcome {user.firstName} {user.lastName}</div>
+                        <div className={Style.profilePhoto}>
+                            <img  alt="" src={user.profilePhoto || UserPhoto}/>
+                            <div className={Style.uploadField}>
+                                <label>Change picture:</label>
+                                <input type={"file"} accept={"image/*"} onChange={onMainPhotoSelected}/>
+                            </div>
+                        </div>
+                        <div>
+                            <button onClick={onLogout}>Log out</button>
+                        </div>
                    </div>
                 : <Login/>}
             </div>

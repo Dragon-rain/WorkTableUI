@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
+import Style from './SearchBar.module.css'
 
 const SearchBarForm = (props) => {
 
     const [districtlist, setDistrictlist] = useState([])
 
-    //const [keyword, setKeyword] = useState("null")
-    //const [type, setType] = useState("null")
-    //const [cityId, setCityID] = useState("null")
-    //const [districtId, setDistrictId] = useState("null")
-    const {currentPage, pageSize, keyword, type, cityId, districtId} = props;
+    const {userId, pageSize, keyword, type, cityId, districtId} = props;
 
     const changeType = (e) => {
         props.setType(e.target.value);
-        console.log(type)
     }
 
     const onCityChange = (e) => {
@@ -21,7 +17,6 @@ const SearchBarForm = (props) => {
         setDistrictlist(props.getDistrictsListByCityId(id))
         if(id==="0") {
             props.setDistrictId(0)
-            console.log("district id changed ", districtId)
         }
         console.log(e.target.value)
     }
@@ -32,23 +27,23 @@ const SearchBarForm = (props) => {
 
     const changeDistrict = (e) => {
         props.setDistrictId(e.target.value);
-        console.log(e.target.value)
         
     }
 
     const sendData = async () => {
-        if(cityId==="0") {
-            props.setDistrictId(0);
-        }
         if(keyword==="") {
             props.setKeyword("null")
         }
-        //alert(currentPage, pageSize, keyword, type, cityId, districtId)
-        await props.requestPosts(currentPage, pageSize, keyword, type, cityId, districtId)
+        if(userId) {
+            await props.requestPosts(1, pageSize, keyword, type, cityId, districtId, userId)
+        } else {
+            await props.requestPosts(1, pageSize, keyword, type, cityId, districtId)
+        }
+
     }
 
     return (
-        <div>
+        <div className={Style.searchForm}>
             <div>
                 <label>Search</label>
                 <input name='keyword' type='text' placeholder='keyword' onChange={changeKeyword}/>
