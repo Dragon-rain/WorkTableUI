@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import Logo from '../../assets/images/Logo-1.png'
 import Style from './SearchBar.module.css'
 import SearchBarReduxForm from './SearchBarForm'
 
@@ -9,12 +8,6 @@ const SearchBar = (props) => {
   return(
     <div className={Style.searhBar}>
       <div className={Style.contentWraper}>
-        <div className={Style.logo}>
-          <NavLink to={'/'}>
-            <span><img src={Logo}/></span>
-            <span><h2>Work Table</h2></span>
-          </NavLink>
-        </div>
         <div className={Style.form}>
           <SearchBarReduxForm requestPosts={props.requestPosts} 
                               getDistrictsListByCityId={props.getDistrictsListByCityId} 

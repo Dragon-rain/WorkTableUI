@@ -25,7 +25,7 @@ const Profile = ({user, changeProfilePicture, Logout, ...props}) => {
                 {props.isFetching ? <Preloader/> : null}
                 {props.isAuth 
                  ? <div className={Style.profileInfo}>
-                        <div>Welcome {user.firstName} {user.lastName}</div>
+                        <div>Welcome {user.lastName} {user.firstName} </div>
                         <div className={Style.profilePhoto}>
                             <img  alt="" src={user.profilePhoto || UserPhoto}/>
                             <div className={Style.uploadField}>

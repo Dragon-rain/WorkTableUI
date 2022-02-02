@@ -49,7 +49,7 @@ const SearchBarForm = (props) => {
                 <input name='keyword' type='text' placeholder='keyword' onChange={changeKeyword}/>
             </div>
             <div>
-                <label>Type: </label> 
+                <label>Type: </label>
                 <select name='type' defaultValue={type} onChange={changeType}>
                     <option key="1" value="null">Choose type</option>
                     <option key="2" value="work">Work</option>

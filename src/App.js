@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, withRouter } from 'react-router-dom';
 import { connect, Provider } from 'react-redux';
 import { initializeApp } from './redux/app-reducer';
 import Preloader from './components/common/Preloader/Preloader';
@@ -40,6 +40,11 @@ class App extends Component {
     return (
       
         <div className='app-wraper'>
+          <div className='logo'>
+            <NavLink to={'/'}>
+              <span><h2>Work Table</h2></span>
+            </NavLink>
+          </div>
           <div className='app-wraper-nav'>
             <Route path='/:userId?' render={WithSuspence(SearchBarContaner)}/>
           </div>

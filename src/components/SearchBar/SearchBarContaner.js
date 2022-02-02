@@ -13,7 +13,6 @@ const SearchBarContaner = (props) => {
     }
 
     const searchComplete = () => {
-      console.log('here')
       props.history.push('/')
     } 
 

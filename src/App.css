@@ -1,36 +1,62 @@
 .app-wraper {
   display: grid;
   grid-template-columns: 3fr 6fr 2fr 1fr;
+  grid-template-rows: 0.02fr 0.2fr 0.2fr 1.5fr;
+  grid-template-areas: 
+  "logo content profile"
+  "nav content profile"
+  "nav content profile"
+  "nav content profile";
 }
 
 .app-wraper-nav {
+  position: relative;
   border-right: 1px solid #E6E6E6;
+  grid-area: nav;
 }
 
 .app-wraper-content {
   background-color: white;
+  grid-area: content;
 }
 
 .app-wraper-profile {
   background-color: #F8F9FA;
+  grid-area: profile;
 }
 
-@media only screen and (max-width: 600px) {
-
-  .app-wraper {
-    display: grid;
-    grid-template-columns: 12fr;
-  }
-
-  .app-wraper-content {
-    background-color: white;
-  }
-
+.logo {
+  grid-area: logo;
+  border-right: 1px solid #E6E6E6;
 }
-@media only screen and (max-width: 1024px) {
+
+.logo h2  {
+  font-size: 2.5em;
+  text-align: center;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid #E6E6E6;
+}
+
+.logo a {
+  text-decoration: none;
+  color: black;
+  transition: 1s;
+}
+
+.logo a:hover {
+  color: #66CCF7;
+}
+
+
+@media (max-width: 1500px) {
   .app-wraper {
     display: grid;
     grid-template-columns: 4fr 8fr;
+    grid-template-areas: 
+    "logo content"
+    "profile content"
+    "nav content"
+    "nav content";
   }
   
   .app-wraper-nav {
@@ -40,4 +66,18 @@
   .app-wraper-content {
     background-color: white;
   }
+}
+
+@media (max-width: 1024px) {
+
+  .app-wraper {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-areas: 
+    "logo"
+    "profile"
+    "nav"
+    "content";
+  }
+
 }
